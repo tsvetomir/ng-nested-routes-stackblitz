@@ -18,27 +18,24 @@ const routes: Routes = [
     component: DummyProgramsComponent,
     children: [
       {
-        path: SubProgramXDefinition.pageInfo.path,
+        path: SubProgramXDefinition.pageInfo.path, // sub-program-x
         component: SubProgramXComponent,
         children: [
           {
-            path: SubProgramXDetailsDefinition.pageInfo.path,
+            path: SubProgramXDetailsDefinition.pageInfo.path, // details
             component: SubProgramXDetailsComponent,
             children: [
               {
-                path: SubProgramYDetailsDefinition.pageInfo.path,
+                path: SubProgramYDetailsDefinition.pageInfo.path, // y-details
                 component: SubProgramYComponent,
-                outlet: 'grid1',
                 children: [
                   {
-                    path: SubProgramZDetailsDefinition.pageInfo.path,
+                    path: SubProgramZDetailsDefinition.pageInfo.path, // z-details
                     component: SubProgramZComponent,
-                    outlet: 'grid1',
                     children: [
                       {
-                        path: SubProgramADetailsDefinition.pageInfo.path,
-                        component: SubProgramAComponent,
-                        outlet: 'grid1'
+                        path: SubProgramADetailsDefinition.pageInfo.path, // a-details
+                        component: SubProgramAComponent
                       }
                     ]
                   }

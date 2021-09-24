@@ -9,10 +9,7 @@
         <sp-page-childs-wrapper [pageChilds]="localChilds" [activePath]="activePath"
           (activatedPath)="activatePath($event)">
           <div class="not-root-page content-box border-box no-border-top">
-            <router-outlet *ngIf="outletKey === 'grid1'" name="grid1"></router-outlet>
-            <router-outlet *ngIf="outletKey === 'grid2'" name="grid2"></router-outlet>
-            <router-outlet *ngIf="outletKey === 'grid3'" name="grid3"></router-outlet>
-            <router-outlet *ngIf="outletKey === 'grid4'" name="grid4"></router-outlet>
+            <router-outlet></router-outlet>
           </div>
         </sp-page-childs-wrapper>
       </div>

@@ -148,42 +148,95 @@ export class MasterPageComponent implements OnChanges, OnInit {
 
   // Parse current url and add new parameters
   private navigateToNewURL(queryParams: any, childURL?: string) {
-    const url = this.router.url;
-    const regEx =
-      "(\\/" +
-      this.page.pageInfo.path +
-      ")|(\\/\\(grid[1-4]:" +
-      this.page.pageInfo.path +
-      "\\))";
+    const url = this.router.url.split("?")[0]; // Only use part before query string (denoted by '?')
+    const path = this.page.pageInfo.path;
 
-    // Find base url for this route
-    const path = url.match(regEx);
-    const pathPos = path.index;
-    const baseURL = url.substring(0, pathPos + path[0].length);
+    const pathPos = url.lastIndexOf(path);
 
-    const optionalParams = Object.keys(queryParams).reduce(
-      (prev, current) =>
-        queryParams[current] !== ""
-          ? prev + ";" + current.toLowerCase() + "=" + queryParams[current]
-          : prev,
-      ""
-    );
+    const baseURL = url.substring(0, pathPos + path.length);
 
-    // this.ignoreParamChange = true;
-
-    let childrenURL = "";
-
-    if (childURL) {
-      if (childURL !== "none") {
-        if (this.isRoot) {
-          childrenURL = "/" + childURL;
-        } else {
-          childrenURL = `/(${this.outletKey}:${childURL})`;
-        }
-      }
+    const pathQueryObject = {};
+    if (Object.keys(queryParams).length !== 0) {
+      pathQueryObject[path] = JSON.stringify(queryParams);
     }
-    console.log(baseURL + optionalParams + childrenURL);
-    return this.router.navigateByUrl(baseURL + optionalParams + childrenURL);
+
+    // // vvv Is this needed in this specific demo? vvv
+    // let childrenURL = "";
+    // if (childURL) {
+    //   let hasChildAccess = true;
+    // const foundChild = this.localChilds.find(
+    //   (child) => child.path === childURL
+    // );
+
+    // if (foundChild) {
+    //   hasChildAccess = foundChild.isEnabled;
+
+    //   // Find other enabled child
+    //   if (!hasChildAccess) {
+    //     const accessableChild = this.localChilds.find(
+    //       (child) => child.isEnabled
+    //     );
+    //     if (accessableChild) {
+    //       childURL = accessableChild.path;
+    //       hasChildAccess = true;
+    //     } else {
+    //       if (this.localChilds.length > 0) {
+    //         console.warn("No access to tabs");
+    //       }
+    //     }
+    //   }
+    // }
+
+    //   if (childURL !== "none" && hasChildAccess) {
+    //     childrenURL = "/" + childURL;
+    //   }
+    // }
+    // // ^^^ Is this needed in this specific demo? ^^^
+
+    // Build array for router.navigate function and filter out empty strings
+    const urlToNavTo = `${baseURL}/${childURL}` // was (baseURL + childrenURL)
+      .split("/")
+      .filter((str) => str.length > 0);
+
+    // vvv HAckety haX vvv
+    let nav = true;
+    let navPreventedReason: string;
+    // vv Check if the childURL is actually the query string (which is an error) vv
+    if (childURL.indexOf("%") === -1) {
+      // Im Westen nichts Neues
+    } else {
+      nav = false;
+      navPreventedReason = "query string in navigation array";
+    }
+    // ^^ check error ^^
+    const lastIndexOfUrlArray = urlToNavTo.length - 1;
+    let ydetailsFoundCount = 0;
+    urlToNavTo.forEach((segment) => {
+      if (segment === "y-details") ydetailsFoundCount++;
+    });
+
+    if (
+      // ??? why does these paths get added ???
+      // !!! "y-details" seems special, other N-detail pages don't trigger this !!!
+      ydetailsFoundCount > 1 ||
+      urlToNavTo[lastIndexOfUrlArray] === "dummy-programs"
+    ) {
+      nav = false;
+      navPreventedReason = "y-details is in array twice";
+    }
+
+    // navigation prevention seems to happen on a second selection in the same component
+    if (!nav)
+      return console.warn(`navigation prevented: ${navPreventedReason}`);
+    // SubProgramADetailsDefinition.pageGrids[0].childs[0].path = "sub-sub-child-details"
+    // It means there are no more routes to navigate to
+    if (urlToNavTo[lastIndexOfUrlArray] === "sub-sub-child-details")
+      return console.info("That's all Folks!");
+    // ^^^ HAckety haX ^^^
+
+    return this.router.navigate(urlToNavTo, {
+      queryParams: pathQueryObject,
+    });
   }
 
   // Change route to new path
