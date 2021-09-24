@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="col-md-12 tab-wrapper">
+    <ul class="nav nav-tabs">
+      <li class="nav-item" *ngFor="let tab of tabs">
+        <a class="nav-link" [ngClass]="{ active: tab.active, disabled: !tab.isEnabled }" role="menuitem"
+          [attr.aria-label]="tab.heading" (click)="select(tab)" [attr.data-e2e]="tab.heading + 'Tab'">
+          <span>{{ tab.heading }}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="content">
+  <ng-content></ng-content>
+</div>

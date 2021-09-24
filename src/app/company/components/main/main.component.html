@@ -1,0 +1,15 @@
+<div class="container">
+  <main class="row">
+    <div class="col-12">
+      <h1 class="text-center" *ngIf="progSelected">
+        <span class="ml-3"></span>Select a program
+      </h1>
+    </div>
+
+    <div class="col-12" *ngIf="sidebarHasContent">
+      <sp-program-menu></sp-program-menu>
+    </div>
+
+    <router-outlet></router-outlet>
+  </main>
+</div>

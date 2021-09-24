@@ -1,0 +1,13 @@
+<div class="detailpage">
+  <div *ngIf="form">
+    <sp-form [selectedData]="selectedData" [pageInfo]="page.pageInfo">
+    </sp-form>
+  </div>
+
+  <div class="mt-3" *ngIf="form && grids?.length > 0"></div>
+
+  <div *ngFor="let gridObject of grids">
+    <sp-master-page [page]="page" [pageGrid]="gridObject.grid" [outletKey]="gridObject.key">
+    </sp-master-page>
+  </div>
+</div>

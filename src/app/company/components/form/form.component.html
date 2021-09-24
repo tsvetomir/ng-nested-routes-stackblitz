@@ -1,0 +1,35 @@
+<div *ngIf="showSelectedData?.length > 0" class="col-12">
+  <fieldset>
+    <legend>{{ pageInfo.title }} Dummy Fieldset <br/>
+      <small>(don't mind the same values, normally this is done by unique data query based on the source in a definition file)</small>
+    </legend>
+    <ng-container *ngFor="let data of showSelectedData">
+      <ng-container *ngIf="data">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Product ID</span>
+          </div>
+          <input type="text" class="form-control" readonly value="{{ data.ProductID }}" >
+        </div>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text">ProductName</span>
+          </div>
+          <input type="text" class="form-control" readonly value="{{ data.ProductName }}" >
+        </div>
+
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" disabled [checked]="data.Discontinued">
+          <label class="form-check-label">Discontinued</label>
+        </div>
+
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text">UnitsInStock</span>
+          </div>
+          <input type="number" class="form-control" readonly value="{{ data.UnitsInStock }}" >
+        </div>
+      </ng-container>
+    </ng-container>
+  </fieldset>
+</div>

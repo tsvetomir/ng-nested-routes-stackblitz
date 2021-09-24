@@ -1,0 +1,46 @@
+.tab-wrapper ::ng-deep {
+  // Tabstrip
+  .nav-item {
+    font-size: 14px;
+    height: 33px;
+
+    .nav-link {
+      border-radius: 4px;
+      align-items: center;
+      background-color: white;
+      border: 2px solid transparent;
+      border-bottom: 0;
+      color: black;
+      display: flex;
+      height: 33px;
+      justify-content: center;
+      margin-right: 5px;
+
+      .tab-indent {
+        text-indent: 5px;
+      }
+
+      &:hover {
+        background-color: darken(white, 10%);
+      }
+
+      &:focus,
+      &:active {
+        background-color: darken(white, 15%);
+        color: white;
+      }
+    }
+
+    .active {
+      background-color: darken(white, 15%);
+      border: 2px solid grey;
+      border-bottom: 0;
+      color: black;
+
+      &:hover {
+        background-color: darken(white, 10%);
+        color: black;
+      }
+    }
+  }
+}

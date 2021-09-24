@@ -1,0 +1,10 @@
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let subProg of subPrograms">
+    {{ subProg.title }}
+    <ul class="list-group pt-2" *ngIf="subProg.childs">
+      <li class="list-group-item" *ngFor="let childSubProg of subProg.childs">
+        <a [routerLink]="getPath(childSubProg.path)">{{ childSubProg.title }}</a>
+      </li>
+    </ul>
+  </li>
+</ul>
