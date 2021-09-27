@@ -1,12 +1,29 @@
 <div class="row">
   <div class="col-12 my-2 text-center">
-    <h3>{{ !isRoot ? 'Select a grid record to show details' : 'Select a child grid record to show details' }}</h3>
+    <h3>
+      {{
+        !isRoot
+          ? "Select a grid record to show details"
+          : "Select a child grid record to show details"
+      }}
+    </h3>
   </div>
 
   <div class="col-12">
-    <kendo-grid [data]="localPageData.dataItems" [height]="350" [selectable]="selectableSettings"
-      [selectedKeys]="selectedKeys" kendoGridSelectBy="ProductID" (selectionChange)="selectionChange($event)">
-      <kendo-grid-column width="40" *ngFor="let column of columns" [field]="column.field">
+    <kendo-grid
+      [data]="localPageData.dataItems"
+      [height]="350"
+      [selectable]="selectableSettings"
+      [selectedKeys]="selectedKeys"
+      [filter]="localPageData.state.filter"
+      kendoGridSelectBy="ProductID"
+      (selectionChange)="selectionChange($event)"
+    >
+      <kendo-grid-column
+        width="40"
+        *ngFor="let column of columns"
+        [field]="column.field"
+      >
       </kendo-grid-column>
     </kendo-grid>
   </div>
