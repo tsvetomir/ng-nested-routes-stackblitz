@@ -1,0 +1,21 @@
+<div class="row text-dark">
+  <div class="col-12">
+    <h3>Filter:</h3>
+
+    <form [formGroup]="filterForm">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Product Name</label>
+        <input class="form-control" type="text" formControlName="productName" />
+      </div>
+    </form>
+  </div>
+
+  <div class="col-12">
+    <button type="button" class="btn btn-primary" (click)="applyFilter()">
+      Filter
+    </button>
+    <button type="button" class="btn btn-danger" (click)="clearFilter()">
+      Clear
+    </button>
+  </div>
+</div>

@@ -3,7 +3,9 @@ import { NavigationEnd, Router } from "@angular/router";
 import { State } from "@progress/kendo-data-query";
 import { products } from "../../../products";
 import { parseUrlPathInSegments } from "../../classes/url-path-parser";
+import { FilterAction } from "../../enums/filter-action.enum";
 import { GridAction } from "../../enums/grid-action.enum";
+import { FilterRequest } from "../../interfaces/filter";
 import { GridRequest } from "../../interfaces/grid";
 import {
   Childpage,
@@ -86,6 +88,42 @@ export class MasterPageComponent implements OnChanges, OnInit {
         }
       }
     );
+  }
+
+  public filterAction(filterRequest: FilterRequest) {
+    switch (filterRequest.filterAction) {
+      case FilterAction.Filter: {
+        this.filter(filterRequest);
+        break;
+      }
+      case FilterAction.Clear: {
+        this.clearFilter();
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
+
+  private filter(filterRequest: FilterRequest) {
+    if (filterRequest.filters.length > 0) {
+      this.localPageData.dataItems.data = [];
+      this.localPageData.dataItems.total = 0;
+
+      for (let i = 0; i < products.length; i++) {
+        if (products[i].ProductName === filterRequest.filters[0].value) {
+          this.localPageData.dataItems.data.push(products[i]);
+          this.localPageData.dataItems.total = products.length;
+        }
+      }
+      this.localPageData.state = filterRequest.state;
+    }
+  }
+
+  private clearFilter() {
+    this.localPageData.dataItems.data = products;
+    this.localPageData.dataItems.total = products.length;
   }
 
   // Switch to correct grid action from grid
