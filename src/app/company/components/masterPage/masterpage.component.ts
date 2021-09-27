@@ -231,6 +231,7 @@ export class MasterPageComponent implements OnChanges, OnInit {
     // SubProgramADetailsDefinition.pageGrids[0].childs[0].path = "sub-sub-child-details"
     // It means there are no more routes to navigate to
     if (urlToNavTo[lastIndexOfUrlArray] === "sub-sub-child-details")
+      // Happens because childs is defined but there is no corresponding component/route
       return console.info("That's all Folks!");
     // ^^^ HAckety haX ^^^
 
@@ -241,7 +242,8 @@ export class MasterPageComponent implements OnChanges, OnInit {
 
   // Change route to new path
   public activatePath(path: string) {
-    this.navigateToNewURL(this.queryParamsRow, path);
+    console.log('activatePath, select, whatever');
+    // this.navigateToNewURL(this.queryParamsRow, path);
   }
 
   private setActivePath() {

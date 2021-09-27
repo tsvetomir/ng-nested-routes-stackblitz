@@ -26,10 +26,10 @@ export const SubProgramADetailsDefinition: DetailPage = {
       },
       columns: [],
       childs: [
-        {
-          title: 'Sub Sub Child Details',
-          path: 'sub-sub-child-details'
-        }
+        // {
+        //   title: 'Sub Sub Child Details',
+        //   path: 'sub-sub-child-details'
+        // }
       ]
     }
   ]
