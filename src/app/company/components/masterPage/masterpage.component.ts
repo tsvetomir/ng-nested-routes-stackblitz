@@ -81,7 +81,6 @@ export class MasterPageComponent implements OnChanges, OnInit {
     this.subscribers.routerSubscription = this.router.events.subscribe(
       (routerEvent: any) => {
         if (routerEvent instanceof NavigationEnd) {
-          // this.ignoreParamChange = false;
           this.setActivePath();
         }
       }
@@ -123,11 +122,7 @@ export class MasterPageComponent implements OnChanges, OnInit {
 
     let childPath = "";
     if (this.localChilds && this.localChilds.length > 0) {
-      if (!this.activePath) {
-        childPath = this.localChilds[0].path;
-      } else {
-        childPath = this.activePath;
-      }
+      childPath = this.activePath ? this.activePath : this.localChilds[0].path;
     }
 
     if (!dataWrapper.dataItem) {
@@ -160,94 +155,38 @@ export class MasterPageComponent implements OnChanges, OnInit {
       pathQueryObject[path] = JSON.stringify(queryParams);
     }
 
-    // // vvv Is this needed in this specific demo? vvv
-    // let childrenURL = "";
-    // if (childURL) {
-    //   let hasChildAccess = true;
-    // const foundChild = this.localChilds.find(
-    //   (child) => child.path === childURL
-    // );
-
-    // if (foundChild) {
-    //   hasChildAccess = foundChild.isEnabled;
-
-    //   // Find other enabled child
-    //   if (!hasChildAccess) {
-    //     const accessableChild = this.localChilds.find(
-    //       (child) => child.isEnabled
-    //     );
-    //     if (accessableChild) {
-    //       childURL = accessableChild.path;
-    //       hasChildAccess = true;
-    //     } else {
-    //       if (this.localChilds.length > 0) {
-    //         console.warn("No access to tabs");
-    //       }
-    //     }
-    //   }
-    // }
-
-    //   if (childURL !== "none" && hasChildAccess) {
-    //     childrenURL = "/" + childURL;
-    //   }
-    // }
-    // // ^^^ Is this needed in this specific demo? ^^^
+    let nav = true;
+    if (childURL === "dummy-programs") {
+      nav = false;
+      console.log(childURL);
+    }
 
     // Build array for router.navigate function and filter out empty strings
-    const urlToNavTo = `${baseURL}/${childURL}` // was (baseURL + childrenURL)
-      .split("/")
-      .filter((str) => str.length > 0);
-
-    // vvv HAckety haX vvv
-    let nav = true;
-    let navPreventedReason: string;
-    // vv Check if the childURL is actually the query string (which is an error) vv
-    if (childURL.indexOf("%") === -1) {
-      // Im Westen nichts Neues
+    let navUrl = `${baseURL}/${childURL}`.split("?")[0];
+    const pathIndexInUrl = navUrl.indexOf(childURL);
+    if (!navUrl.endsWith("/")) navUrl += "/";
+    if (pathIndexInUrl === -1) {
+      navUrl += `${childURL}`;
     } else {
-      nav = false;
-      navPreventedReason = "query string in navigation array";
-    }
-    // ^^ check error ^^
-    const lastIndexOfUrlArray = urlToNavTo.length - 1;
-    let ydetailsFoundCount = 0;
-    urlToNavTo.forEach((segment) => {
-      if (segment === "y-details") ydetailsFoundCount++;
-    });
-
-    if (
-      // ??? why does these paths get added ???
-      // !!! "y-details" seems special, other N-detail pages don't trigger this !!!
-      ydetailsFoundCount > 1 ||
-      urlToNavTo[lastIndexOfUrlArray] === "dummy-programs"
-    ) {
-      nav = false;
-      navPreventedReason = "y-details is in array twice";
+      navUrl = navUrl.slice(0, pathIndexInUrl + childURL.length);
     }
 
-    // navigation prevention seems to happen on a second selection in the same component
-    if (!nav)
-      return console.warn(`navigation prevented: ${navPreventedReason}`);
-    // SubProgramADetailsDefinition.pageGrids[0].childs[0].path = "sub-sub-child-details"
-    // It means there are no more routes to navigate to
-    if (urlToNavTo[lastIndexOfUrlArray] === "sub-sub-child-details")
-      // Happens because childs is defined but there is no corresponding component/route
-      return console.info("That's all Folks!");
-    // ^^^ HAckety haX ^^^
-
-    return this.router.navigate(urlToNavTo, {
+    const navUrlArray = navUrl.split("/").filter((str) => str.length > 0);
+    if (nav === false) return console.error("navigation error");
+    return this.router.navigate(navUrlArray, {
       queryParams: pathQueryObject,
     });
   }
 
   // Change route to new path
   public activatePath(path: string) {
-    console.log('activatePath, select, whatever');
-    // this.navigateToNewURL(this.queryParamsRow, path);
+    this.navigateToNewURL(this.queryParamsRow, path);
   }
 
   private setActivePath() {
-    const pathSegments = parseUrlPathInSegments(this.router.url);
+    const pathSegments = this.router.url
+      .split("/")
+      .filter((segment) => segment);
     const index = pathSegments.lastIndexOf(this.page.pageInfo.path);
     if (pathSegments[index + 1]) {
       this.activePath = pathSegments[index + 1];
