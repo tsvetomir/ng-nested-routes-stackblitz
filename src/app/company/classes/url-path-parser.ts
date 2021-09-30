@@ -1,3 +1,5 @@
+// Used for parsing mixed urls with parameters and auxiliary outlets 
+// function is not needed anymore
 export function parseUrlPathInSegments(fullUrl: string): Array<string> {
   const result = fullUrl
     .split('/')
