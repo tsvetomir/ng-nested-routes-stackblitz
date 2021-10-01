@@ -2,7 +2,6 @@ import { Component, Input, OnChanges, OnInit } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
 import { State } from "@progress/kendo-data-query";
 import { products } from "../../../products";
-import { parseUrlPathInSegments } from "../../classes/url-path-parser";
 import { GridAction } from "../../enums/grid-action.enum";
 import { GridRequest } from "../../interfaces/grid";
 import {
@@ -25,8 +24,6 @@ export class MasterPageComponent implements OnChanges, OnInit {
   pageGrid: PageGrid;
   @Input()
   isRoot: boolean;
-  @Input()
-  outletKey: string;
 
   public localChilds: Array<Childpage>;
   public localPageData: PageData;

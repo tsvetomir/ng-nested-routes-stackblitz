@@ -30,8 +30,6 @@ export class GridComponent implements OnChanges {
   pageData: PageData;
   @Input()
   pageGrid: PageGrid;
-  @Input()
-  outletKey: string;
   @Output()
   gridAction = new EventEmitter<GridRequest>();
 

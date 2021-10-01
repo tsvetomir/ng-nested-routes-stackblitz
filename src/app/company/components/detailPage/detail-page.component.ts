@@ -11,7 +11,6 @@ export class DetailPageComponent implements OnInit {
   @Input()
   page: DetailPage;
   @Input()
-  outletKey: string;
   public form: PageForm;
   public grids: Array<{ key: string; grid: PageGrid }> = [];
   public selectedData: any;

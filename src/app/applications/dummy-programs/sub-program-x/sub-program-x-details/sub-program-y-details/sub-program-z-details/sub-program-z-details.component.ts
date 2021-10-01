@@ -4,7 +4,7 @@ import { SubProgramZDetailsDefinition } from './sub-program-z-details.definition
 
 @Component({
   template: `
-    <sp-detail-page [page]="page" [outletKey]="key"></sp-detail-page>
+    <sp-detail-page [page]="page"></sp-detail-page>
   `
 })
 export class SubProgramZComponent {
