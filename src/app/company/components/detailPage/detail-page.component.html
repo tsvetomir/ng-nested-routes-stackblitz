@@ -7,7 +7,7 @@
   <div class="mt-3" *ngIf="form && grids?.length > 0"></div>
 
   <div *ngFor="let gridObject of grids">
-    <sp-master-page [page]="page" [pageGrid]="gridObject.grid" [outletKey]="gridObject.key">
+    <sp-master-page [page]="page" [pageGrid]="gridObject.grid">
     </sp-master-page>
   </div>
 </div>

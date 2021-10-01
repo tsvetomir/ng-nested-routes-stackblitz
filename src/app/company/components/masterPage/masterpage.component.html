@@ -3,27 +3,14 @@
     <sp-filter (filterAction)="filterAction($event)"></sp-filter>
   </div>
   <div class="col-12">
-    <sp-grid
-      [page]="page"
-      [pageData]="localPageData"
-      [pageGrid]="localPageGrid"
-      [isRoot]="!isRoot"
-      [outletKey]="outletKey"
-      (gridAction)="gridAction($event)"
-    >
+    <sp-grid [page]="page" [pageData]="localPageData" [pageGrid]="localPageGrid" [isRoot]="!isRoot"
+       (gridAction)="gridAction($event)">
     </sp-grid>
 
     <ng-container *ngIf="!isRoot" class="not-root mt-3">
-      <div
-        *ngIf="localPageGrid.childs"
-        [hidden]="!activePath"
-        class="margin-top-20"
-      >
-        <sp-page-childs-wrapper
-          [pageChilds]="localChilds"
-          [activePath]="activePath"
-          (activatedPath)="activatePath($event)"
-        >
+      <div *ngIf="localPageGrid.childs" class="margin-top-20">
+        <sp-page-childs-wrapper [pageChilds]="localChilds" [activePath]="activePath"
+          (activatedPath)="activatePath($event)">
           <div class="not-root-page content-box border-box no-border-top">
             <router-outlet></router-outlet>
           </div>
@@ -34,12 +21,9 @@
 
   <div class="col-12 mt-3">
     <div *ngIf="isRoot" class="root">
-      <div *ngIf="localPageGrid.childs" [hidden]="!activePath">
-        <sp-page-childs-wrapper
-          [pageChilds]="localChilds"
-          [activePath]="activePath"
-          (activatedPath)="activatePath($event)"
-        >
+      <div *ngIf="localPageGrid.childs">
+        <sp-page-childs-wrapper [pageChilds]="localChilds" [activePath]="activePath"
+          (activatedPath)="activatePath($event)">
           <div class="content-box border-box no-border-top">
             <router-outlet></router-outlet>
           </div>

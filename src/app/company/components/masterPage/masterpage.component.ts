@@ -27,8 +27,6 @@ export class MasterPageComponent implements OnChanges, OnInit {
   pageGrid: PageGrid;
   @Input()
   isRoot: boolean;
-  @Input()
-  outletKey: string;
 
   public localChilds: Array<Childpage>;
   public localPageData: PageData;
