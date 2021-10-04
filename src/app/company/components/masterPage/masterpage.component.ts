@@ -244,9 +244,13 @@ export class MasterPageComponent implements OnChanges, OnInit {
 
   // Create queryParams object based on given state
   private createQueryParamsFromState(state: State) {
-    return {
+    const queryParams = {
       take: state.take,
       skip: state.skip,
     };
+    if (state.filter.filters.length > 0) {
+      queryParams['filters'] = state.filter.filters
+    }
+    return queryParams;
   }
 }

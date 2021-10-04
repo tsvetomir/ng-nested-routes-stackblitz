@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DetailPage, PageForm, PageGrid } from '../../interfaces/page';
 import { SelectedDataService } from '../../services/selected-data.service';
 
@@ -14,10 +15,16 @@ export class DetailPageComponent implements OnInit {
   public form: PageForm;
   public grids: Array<{ key: string; grid: PageGrid }> = [];
   public selectedData: any;
+  public filters: any = {};
 
-  constructor(private selectedDataService: SelectedDataService) {}
+  constructor(
+    private selectedDataService: SelectedDataService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
+    this.initFilters();
+
     this.selectedDataService.selectedData$.subscribe(selectedData => {
       this.selectedData = selectedData;
     });
@@ -36,5 +43,13 @@ export class DetailPageComponent implements OnInit {
         });
       }
     }
+  }
+
+  initFilters() {
+    this.route.queryParams.subscribe((queryParams) => {
+      for (let key in queryParams) {
+        this.filters[key] = JSON.parse(queryParams[key]);
+      }
+    });
   }
 }
