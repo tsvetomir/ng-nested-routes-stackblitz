@@ -1,8 +1,7 @@
 import { Component, Input, OnChanges, OnInit } from "@angular/core";
-import { NavigationEnd, Router } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { State } from "@progress/kendo-data-query";
 import { products } from "../../../products";
-import { parseUrlPathInSegments } from "../../classes/url-path-parser";
 import { FilterAction } from "../../enums/filter-action.enum";
 import { GridAction } from "../../enums/grid-action.enum";
 import { FilterRequest } from "../../interfaces/filter";
@@ -39,6 +38,7 @@ export class MasterPageComponent implements OnChanges, OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private selectedDataService: SelectedDataService
   ) {}
 
@@ -59,15 +59,25 @@ export class MasterPageComponent implements OnChanges, OnInit {
       },
     };
 
-    this.localPageGrid.defaultPagerSize = 15;
+    this.route.queryParams.subscribe((queryParams) => {
+      // No filters present in this case
+      if (queryParams[this.page.pageInfo.path] === undefined) {
+        this.localPageGrid.defaultPagerSize = 15;
+        if (!this.localPageData.state.take) {
+          this.localPageData.state.take = this.localPageGrid.defaultPagerSize;
+        }
 
-    if (!this.localPageData.state.take) {
-      this.localPageData.state.take = this.localPageGrid.defaultPagerSize;
-    }
+        if (!this.localPageData.state.skip) {
+          this.localPageData.state.skip = 0;
+        }
+        return;
+      }
 
-    if (!this.localPageData.state.skip) {
-      this.localPageData.state.skip = 0;
-    }
+      const parsedParams = JSON.parse(queryParams[this.page.pageInfo.path]);
+      this.localPageData.state.skip = parsedParams.skip;
+      this.localPageData.state.take = parsedParams.take;
+      this.localPageData.state.filter.filters = parsedParams.filters;
+    });
 
     // normally the data is fetched by unique source from definition file,
     // now all the grids have same data for example purpose
@@ -104,18 +114,18 @@ export class MasterPageComponent implements OnChanges, OnInit {
   }
 
   private filter(filterRequest: FilterRequest) {
-    if (filterRequest.filters.length > 0) {
-      this.localPageData.dataItems.data = [];
-      this.localPageData.dataItems.total = 0;
+    if (filterRequest.filters.length === 0) return;
 
-      for (let i = 0; i < products.length; i++) {
-        if (products[i].ProductName === filterRequest.filters[0].value) {
-          this.localPageData.dataItems.data.push(products[i]);
-          this.localPageData.dataItems.total = products.length;
-        }
+    this.localPageData.dataItems.data = [];
+    this.localPageData.dataItems.total = 0;
+
+    for (let i = 0; i < products.length; i++) {
+      if (products[i].ProductName === filterRequest.filters[0].value) {
+        this.localPageData.dataItems.data.push(products[i]);
+        this.localPageData.dataItems.total = products.length;
       }
-      this.localPageData.state = filterRequest.state;
     }
+    this.localPageData.state = filterRequest.state;
   }
 
   private clearFilter() {
@@ -194,7 +204,7 @@ export class MasterPageComponent implements OnChanges, OnInit {
     let nav = true;
     if (childURL === "dummy-programs") {
       nav = false;
-      console.log(childURL);
+      console.warn(childURL);
     }
 
     // Build array for router.navigate function and filter out empty strings
@@ -249,7 +259,7 @@ export class MasterPageComponent implements OnChanges, OnInit {
       skip: state.skip,
     };
     if (state.filter.filters.length > 0) {
-      queryParams['filters'] = state.filter.filters
+      queryParams["filters"] = state.filter.filters;
     }
     return queryParams;
   }
