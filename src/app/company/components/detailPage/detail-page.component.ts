@@ -47,8 +47,8 @@ export class DetailPageComponent implements OnInit {
 
   initFilters() {
     this.route.queryParams.subscribe((queryParams) => {
-      if (Object.keys(queryParams).length === 0) return;
-
+      if (queryParams[this.page.pageInfo.path] === undefined) return;
+      
       this.filters = JSON.parse(queryParams[this.page.pageInfo.path]);
     });
   }
