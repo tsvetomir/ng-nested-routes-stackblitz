@@ -221,6 +221,7 @@ export class MasterPageComponent implements OnChanges, OnInit {
     if (nav === false) return console.error("navigation error");
     return this.router.navigate(navUrlArray, {
       queryParams: pathQueryObject,
+      queryParamsHandling: "merge"
     });
   }
 
